@@ -2,6 +2,14 @@ version: '3.8'
 services:
   backend:
     build: ./backend
+    container_name: egger_backend
+    ports:
+      - "8002:8000"
+    volumes:
+      - ./backend:/app
+      - /home/ubuntu/data/egger_cad:/data  # mount data folder for DB and DXF files
+    environment:
+      - SQLITE_DB=/data/egger.db
   mock_homag:
     build: ./mock_homag
     container_name: mock_homag_api
@@ -9,16 +17,6 @@ services:
       - "5001:5001"
     environment:
       - FLASK_ENV=development
-  frontend:
-    build: ./frontend
-    container_name: egger_backend
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./backend:/app
-      - ~/data/egger_cad:/data  # mount data folder for DB and DXF files
-    environment:
-      - SQLITE_DB=/data/egger.db
   frontend:
     build: ./frontend
     container_name: egger_frontend
